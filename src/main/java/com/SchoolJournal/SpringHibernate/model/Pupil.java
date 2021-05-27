@@ -11,6 +11,7 @@ public final class Pupil extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name = "pupil_iD")
+    @Setter
     private PupilInClassRoom pupilInClassRoom;
 
     @Column(nullable = false)
@@ -23,11 +24,11 @@ public final class Pupil extends BaseModel {
     @Column(nullable = false)
     private String surname;
 
-    public Pupil(long id,String name, String surname) {
-        super(id);
-        this.name = name;
-        this.surname = surname;
-    }
+//    public Pupil(long id,String name, String surname) {
+//        super(id);
+//        this.name = name;
+//        this.surname = surname;
+//    }
 
     public Pupil() {
 

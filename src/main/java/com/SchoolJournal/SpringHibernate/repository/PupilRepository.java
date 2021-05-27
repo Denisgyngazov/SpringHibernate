@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface PupilRepository extends CrudRepository<Pupil,Long> {
     List<Pupil> findByName(String name);
-
-    @Query(nativeQuery = true, value = "SELECT p.id, p.name, p.surname " +
-            "FROM pupil p " +
-            "INNER JOIN pupil_in_class_room in ON p.pupil_id = in.id " +
-            "INNER JOIN teacher t ON t.teacher_id = in.id " +
-            "WHERE t.name = :name ")
-    List<Pupil> findPupilByTeacher(@Param("name") String name);
+//
+//    @Query(nativeQuery = true, value = "SELECT p.id, p.name, p.surname " +
+//            "FROM pupil p " +
+//            "INNER JOIN pupil_in_class_room a ON p.pupil_id = a.id " +
+//            "INNER JOIN teacher t ON t.teacher_id = a.id " +
+//            "WHERE t.name = :name ")
+//    List<Pupil> findPupilByTeacher(@Param("name") String name);
 }
 
 

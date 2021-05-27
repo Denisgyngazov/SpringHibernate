@@ -5,7 +5,7 @@ import lombok.Getter;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
  abstract class BaseModel {
 
     @Id
@@ -14,9 +14,9 @@ import javax.persistence.*;
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    public BaseModel(long id) {
-        this.id = id;
-    }
+//    public BaseModel(long id) {
+//        this.id = id;
+//    }
 
     protected BaseModel() {
     }

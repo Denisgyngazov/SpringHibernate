@@ -28,9 +28,9 @@ public final class PupilInClassRoom  extends BaseModel {
 
     }
 
-    public PupilInClassRoom(long id, long pupilID, long classRoomID, long teacherID) {
-        super(id);
-    }
+//    public PupilInClassRoom(long id, long pupilID, long classRoomID, long teacherID) {
+//
+//    }
 
     public PupilInClassRoom(ClassRoom classRoom, Teacher teacher, Pupil pupil) {
     }

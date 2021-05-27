@@ -9,16 +9,18 @@ import com.SchoolJournal.SpringHibernate.repository.PupilInClassRoomRepository;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
+
 class SpringHibernateApplicationTests {
 
 	@Autowired
@@ -33,9 +35,38 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private PupilInClassRoomRepository pupilInClassRoomRepository;
 
+//	@Rollback(value = false)
+//	@Test
+//	public void contextLoads() {
+//		Pupil pupil = new Pupil();
+//		pupil.setName("Hello");
+//		pupil.setSurname("hello");
+//
+//		Teacher teacher = new Teacher();
+//		teacher.setName("Alla");
+//		teacher.setSurname("Aronova");
+//		teacher.setDiscipline("Mat");
+//
+//		ClassRoom classRoom = new ClassRoom();
+//		classRoom.setName("1A");
+//
+//		PupilInClassRoom pupilInClassRoom = new PupilInClassRoom();
+//		teacher.setPupilInClassRoom(pupilInClassRoom);
+//		pupil.setPupilInClassRoom(pupilInClassRoom);
+//		classRoom.setPupilInClassRoom(pupilInClassRoom);
+//
+//		pupilInClassRoomRepository.save(pupilInClassRoom);
+//		pupilRepository.save(pupil);
+//		teacherRepository.save(teacher);
+//		classRoomRepository.save(classRoom);
+//
+//		System.out.println((pupilInClassRoomRepository.findPupilByTeacher(teacher.getName())));
+//
+//	}
 
+	@Test
 	@Rollback(value = false)
-	public PupilInClassRoom contextLoads() {
+	public void createEntity() {
 		Pupil pupil = new Pupil();
 		pupil.setName("Hello");
 		pupil.setSurname("hello");
@@ -49,21 +80,67 @@ class SpringHibernateApplicationTests {
 		classRoom.setName("1A");
 
 		PupilInClassRoom pupilInClassRoom = new PupilInClassRoom();
-		pupilInClassRoom.setPupil(pupil);
-		pupilInClassRoom.setTeacher(teacher);
-		pupilInClassRoom.setClassRoom(classRoom);
+		teacher.setPupilInClassRoom(pupilInClassRoom);
+		pupil.setPupilInClassRoom(pupilInClassRoom);
+		classRoom.setPupilInClassRoom(pupilInClassRoom);
 
-		pupilRepository.save(pupil);
+
+		pupilInClassRoomRepository.save(pupilInClassRoom);
 		teacherRepository.save(teacher);
+		pupilRepository.save(pupil);
 		classRoomRepository.save(classRoom);
 
 
-		return pupilInClassRoomRepository.save(pupilInClassRoom);
+		Iterable<Pupil> allPupil = pupilRepository.findAll();
+		for (Pupil pupil1 : allPupil) {
+			System.out.println("Ученики");
+			System.out.println("----------------------------");
+			System.out.println(pupil1.getId() + " " +
+					pupil1.getName() + " " +
+					pupil1.getSurname());
+			System.out.println("----------------------------");
+		}
+
+		Iterable<Teacher> allTeacher = teacherRepository.findAll();
+		for (Teacher teacher1 : allTeacher) {
+			System.out.println("Учителя");
+			System.out.println("----------------------------");
+			System.out.println(teacher1.getId() + " " +
+					teacher1.getName() + " " +
+					teacher1.getSurname() + " " +
+					teacher1.getDiscipline());
+			System.out.println("----------------------------");
+		}
+		Iterable<ClassRoom> allClassRoom = classRoomRepository.findAll();
+		for (ClassRoom classRoom1 : allClassRoom) {
+			System.out.println("Класс");
+			System.out.println("----------------------------");
+			System.out.println(classRoom1.getId() + " "
+					+classRoom1.getName());
+			System.out.println("----------------------------");
+		}
+
+		Iterable<PupilInClassRoom> allPupilInClassRoom = pupilInClassRoomRepository.findAll();
+		for (PupilInClassRoom pupilInClassRoom1 : allPupilInClassRoom) {
+			System.out.println("Ученики в классе");
+			System.out.println("----------------------------");
+			System.out.println(pupilInClassRoom1.getPupil().getId() + " " +
+					pupilInClassRoom1.getPupil().getName() + " " +
+					pupilInClassRoom1.getPupil().getSurname());
+
+			System.out.println(pupilInClassRoom1.getTeacher().getId() + " " +
+					pupilInClassRoom1.getTeacher().getName() + " " +
+					pupilInClassRoom1.getTeacher().getSurname() + " " +
+					pupilInClassRoom1.getTeacher().getDiscipline());
+
+			System.out.println(pupilInClassRoom1.getClassRoom().getId() + " " +
+					pupilInClassRoom1.getClassRoom().getName());
+		}
 	}
 
-	@Test
-	public void testFindBy() {
-		PupilInClassRoom pupilInClassRoom = contextLoads();
-		System.out.println((pupilRepository.findPupilByTeacher(pupilInClassRoom.getTeacher().getName())));
-	}
+//	@Test
+//	public void testFindBy() {
+//		PupilInClassRoom pupilInClassRoom = contextLoads();
+//		System.out.println((pupilRepository.findPupilByTeacher(pupilInClassRoom.getTeacher().getName())));
+//	}
 }
