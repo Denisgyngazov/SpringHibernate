@@ -1,23 +1,32 @@
 package com.SchoolJournal.SpringHibernate.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Teacher")
+@Table(name = "teacher")
 public final class Teacher extends BaseModel {
 
-    @OneToOne
-    @JoinColumn(name = "pupilInClassRoom_teacherID")
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
     private PupilInClassRoom pupilInClassRoom;
 
     @Column(nullable = false)
-    private final String name;
+    @Getter
+    @Setter
+    private String name;
 
     @Column(nullable = false)
-    private final String surname;
+    @Getter
+    @Setter
+    private String surname;
 
     @Column(nullable = false)
-    private final String discipline;
+    @Getter
+    @Setter
+    private String discipline;
 
     public Teacher(long id, String name, String surname, String discipline) {
         super(id);
@@ -26,15 +35,6 @@ public final class Teacher extends BaseModel {
         this.discipline = discipline;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getDiscipline() {
-        return discipline;
+    public Teacher() {
     }
 }

@@ -2,12 +2,15 @@ package com.SchoolJournal.SpringHibernate.controller;
 
 import com.SchoolJournal.SpringHibernate.exception.IdMismatchException;
 import com.SchoolJournal.SpringHibernate.exception.NotFoundException;
+import com.SchoolJournal.SpringHibernate.model.Pupil;
 import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
+import com.SchoolJournal.SpringHibernate.model.Teacher;
 import com.SchoolJournal.SpringHibernate.repository.PupilInClassRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController

@@ -1,32 +1,35 @@
 package com.SchoolJournal.SpringHibernate.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Pupil")
+@Table(name = "pupil")
 public final class Pupil extends BaseModel {
 
-    @OneToOne
-    @JoinColumn(name = "pupilInClassRoom_pupilID")
+    @ManyToOne
+    @JoinColumn(name = "pupil_iD")
     private PupilInClassRoom pupilInClassRoom;
 
     @Column(nullable = false)
-    private final String name;
+    @Getter
+    @Setter
+    private String name;
 
+    @Getter
+    @Setter
     @Column(nullable = false)
-    private final String surname;
+    private String surname;
 
-    public Pupil(long id, String name, String surname) {
+    public Pupil(long id,String name, String surname) {
         super(id);
         this.name = name;
         this.surname = surname;
     }
 
-    public String getName() {
-        return name;
-    }
+    public Pupil() {
 
-    public String getSurname() {
-        return surname;
     }
 }

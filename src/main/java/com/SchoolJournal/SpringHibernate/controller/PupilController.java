@@ -3,6 +3,7 @@ package com.SchoolJournal.SpringHibernate.controller;
 import com.SchoolJournal.SpringHibernate.exception.IdMismatchException;
 import com.SchoolJournal.SpringHibernate.exception.NotFoundException;
 import com.SchoolJournal.SpringHibernate.model.Pupil;
+import com.SchoolJournal.SpringHibernate.model.Teacher;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,11 @@ public class PupilController {
         return pupilRepository.findByName(name);
     }
 
+//    @GetMapping("/{searchPupilByTeacher}")
+//    public List<Pupil> findPupilByTeacher(@RequestBody Teacher teacher) {
+//       return pupilRepository.findPupilByTeacher(teacher.getName());
+//    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Pupil create(@RequestBody Pupil pupil) {
@@ -37,6 +43,7 @@ public class PupilController {
     public void delete(@PathVariable Long id) {
         pupilRepository.findById(id).orElseThrow(NotFoundException::new);
         pupilRepository.deleteById(id);
+
     }
 
     @PutMapping("/{id}")
@@ -47,7 +54,4 @@ public class PupilController {
         pupilRepository.findById(id).orElseThrow(NotFoundException::new);
         return pupilRepository.save(pupil);
     }
-
-
-
 }

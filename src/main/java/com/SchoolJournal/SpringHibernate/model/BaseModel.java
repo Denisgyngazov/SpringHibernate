@@ -1,20 +1,23 @@
 package com.SchoolJournal.SpringHibernate.model;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
 @Entity
-abstract class BaseModel {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+ abstract class BaseModel {
 
     @Id
     @Column(name = "id")
+    @Getter
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private final long id;
+    private long id;
 
     public BaseModel(long id) {
         this.id = id;
     }
 
-    public long getId() {
-        return id;
+    protected BaseModel() {
     }
 }

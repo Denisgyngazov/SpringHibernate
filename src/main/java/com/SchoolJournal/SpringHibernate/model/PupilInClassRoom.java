@@ -1,44 +1,37 @@
 package com.SchoolJournal.SpringHibernate.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "PupilInClassRoom")
+@Table(name = "pupil_in_class_room")
 public final class PupilInClassRoom  extends BaseModel {
-    @OneToOne(mappedBy = "pupilInClassRoom")
-    Pupil pupil;
 
     @OneToOne(mappedBy = "pupilInClassRoom")
-    ClassRoom classRoom;
+    @Getter
+    @Setter
+    private Pupil pupil;
 
     @OneToOne(mappedBy = "pupilInClassRoom")
-    Teacher teacher;
+    @Getter
+    @Setter
+    private ClassRoom classRoom;
 
-    @Column(nullable = false)
-    private final long pupilID;
+    @OneToOne(mappedBy = "pupilInClassRoom")
+    @Getter
+    @Setter
+    private Teacher teacher;
 
-    @Column(nullable = false)
-    private final long classRoomID;
+    public PupilInClassRoom() {
 
-    @Column(nullable = false)
-    private final long teacherID;
+    }
 
     public PupilInClassRoom(long id, long pupilID, long classRoomID, long teacherID) {
         super(id);
-        this.pupilID = pupilID;
-        this.classRoomID = classRoomID;
-        this.teacherID = teacherID;
     }
 
-    public long getPupilID() {
-        return pupilID;
-    }
-
-    public long getClassRoomID() {
-        return classRoomID;
-    }
-
-    public long getTeacherID() {
-        return teacherID;
+    public PupilInClassRoom(ClassRoom classRoom, Teacher teacher, Pupil pupil) {
     }
 }
