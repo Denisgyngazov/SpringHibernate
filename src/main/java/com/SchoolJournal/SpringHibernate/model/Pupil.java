@@ -10,7 +10,7 @@ import javax.persistence.*;
 public final class Pupil extends BaseModel {
 
     @ManyToOne
-    @JoinColumn(name = "pupil_iD")
+    @JoinColumn(name = "pupil_id")
     @Setter
     private PupilInClassRoom pupilInClassRoom;
 
@@ -23,12 +23,6 @@ public final class Pupil extends BaseModel {
     @Setter
     @Column(nullable = false)
     private String surname;
-
-//    public Pupil(long id,String name, String surname) {
-//        super(id);
-//        this.name = name;
-//        this.surname = surname;
-//    }
 
     public Pupil() {
 

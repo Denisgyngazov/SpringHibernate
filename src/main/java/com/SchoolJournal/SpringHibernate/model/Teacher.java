@@ -29,13 +29,7 @@ public final class Teacher extends BaseModel {
     @Setter
     private String discipline;
 
-//    public Teacher(long id, String name, String surname, String discipline) {
-//        super(id);
-//        this.name = name;
-//        this.surname = surname;
-//        this.discipline = discipline;
-//    }
-
     public Teacher() {
+
     }
 }

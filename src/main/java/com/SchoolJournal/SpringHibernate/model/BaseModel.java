@@ -14,10 +14,6 @@ import javax.persistence.*;
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-//    public BaseModel(long id) {
-//        this.id = id;
-//    }
-
     protected BaseModel() {
     }
 }

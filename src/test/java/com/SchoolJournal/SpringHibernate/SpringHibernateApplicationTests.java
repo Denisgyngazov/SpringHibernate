@@ -9,7 +9,6 @@ import com.SchoolJournal.SpringHibernate.repository.PupilInClassRoomRepository;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
-
 class SpringHibernateApplicationTests {
 
 	@Autowired
@@ -35,34 +33,10 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private PupilInClassRoomRepository pupilInClassRoomRepository;
 
-//	@Rollback(value = false)
-//	@Test
-//	public void contextLoads() {
-//		Pupil pupil = new Pupil();
-//		pupil.setName("Hello");
-//		pupil.setSurname("hello");
-//
-//		Teacher teacher = new Teacher();
-//		teacher.setName("Alla");
-//		teacher.setSurname("Aronova");
-//		teacher.setDiscipline("Mat");
-//
-//		ClassRoom classRoom = new ClassRoom();
-//		classRoom.setName("1A");
-//
-//		PupilInClassRoom pupilInClassRoom = new PupilInClassRoom();
-//		teacher.setPupilInClassRoom(pupilInClassRoom);
-//		pupil.setPupilInClassRoom(pupilInClassRoom);
-//		classRoom.setPupilInClassRoom(pupilInClassRoom);
-//
-//		pupilInClassRoomRepository.save(pupilInClassRoom);
-//		pupilRepository.save(pupil);
-//		teacherRepository.save(teacher);
-//		classRoomRepository.save(classRoom);
-//
-//		System.out.println((pupilInClassRoomRepository.findPupilByTeacher(teacher.getName())));
-//
-//	}
+	@Rollback(value = false)
+	public void contextLoads() {
+
+	}
 
 	@Test
 	@Rollback(value = false)
@@ -136,11 +110,10 @@ class SpringHibernateApplicationTests {
 			System.out.println(pupilInClassRoom1.getClassRoom().getId() + " " +
 					pupilInClassRoom1.getClassRoom().getName());
 		}
-	}
 
-//	@Test
-//	public void testFindBy() {
-//		PupilInClassRoom pupilInClassRoom = contextLoads();
-//		System.out.println((pupilRepository.findPupilByTeacher(pupilInClassRoom.getTeacher().getName())));
-//	}
+		System.out.println("----------------------------");
+		System.out.println("Поиск ученика по учителю");
+		System.out.println("----------------------------");
+		System.out.println(pupilRepository.findPupilByTeacher(pupilInClassRoom.getTeacher().getName()));
+	}
 }
