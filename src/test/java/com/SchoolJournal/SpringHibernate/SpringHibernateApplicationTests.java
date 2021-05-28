@@ -120,10 +120,5 @@ class SpringHibernateApplicationTests {
 						pupil1.getSurname());
 			}
 		}
-
-		System.out.println("----------------------------");
-		System.out.println("Поиск ученика по учителю");
-		System.out.println("----------------------------");
-		System.out.println(pupilRepository.findPupilByTeacher(pupilInClassRoom.getTeacher().getName()));
 	}
 }
