@@ -113,7 +113,7 @@ class SpringHibernateApplicationTests {
 
 			System.out.println("Поиск ученика по учителю");
 			System.out.println("----------------------------");
-			Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findBypupilInClassRoom_Teacher_Name("Alla");
+			Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findByPupilInClassRoomTeacherName("Alla");
 			for (Pupil pupil1 : finByTeacherOnPupil) {
 				System.out.println(pupil1.getId() + " " +
 						pupil1.getName() + " " +
