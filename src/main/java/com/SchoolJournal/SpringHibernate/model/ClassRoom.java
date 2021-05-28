@@ -19,12 +19,6 @@ public final class ClassRoom extends BaseModel {
     @Setter
     private String name;
 
-//    public ClassRoom(long id, String name) {
-//        super(id);
-//        this.name = name;
-//
-//    }
-
     public ClassRoom() {
     }
 }

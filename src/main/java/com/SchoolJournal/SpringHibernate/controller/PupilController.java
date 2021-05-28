@@ -30,7 +30,7 @@ public class PupilController {
 
 //    @GetMapping("/{searchPupilByTeacher}")
 //    public List<Pupil> findPupilByTeacher(@RequestBody Teacher teacher) {
-//       return pupilRepository.findPupilByTeacher(teacher.getName());
+//       return pupilRepository.findByTeacher_Pupil_NameIn(teacher.getName());
 //    }
 
     @PostMapping

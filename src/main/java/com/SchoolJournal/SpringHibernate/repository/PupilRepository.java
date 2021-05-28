@@ -1,6 +1,7 @@
 package com.SchoolJournal.SpringHibernate.repository;
 
 import com.SchoolJournal.SpringHibernate.model.Pupil;
+import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +17,10 @@ public interface PupilRepository extends CrudRepository<Pupil,Long> {
 //            "INNER JOIN teacher t ON t.teacher_id = a.id " +
 //            "WHERE t.name = :name ")
 //    List<Pupil> findPupilByTeacher(@Param("name") String name);
+
+    List<Pupil> findBypupilInClassRoom_Teacher_Name(String name);
 }
+
 
 
 

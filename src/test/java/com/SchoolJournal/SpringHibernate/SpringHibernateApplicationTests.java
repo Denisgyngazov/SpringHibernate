@@ -9,14 +9,13 @@ import com.SchoolJournal.SpringHibernate.repository.PupilInClassRoomRepository;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
+
 
 
 @SpringBootTest
@@ -135,6 +134,16 @@ class SpringHibernateApplicationTests {
 
 			System.out.println(pupilInClassRoom1.getClassRoom().getId() + " " +
 					pupilInClassRoom1.getClassRoom().getName());
+			System.out.println("----------------------------");
+
+			System.out.println("Поиск ученика по учителю");
+			System.out.println("----------------------------");
+			Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findBypupilInClassRoom_Teacher_Name("Alla");
+			for (Pupil pupil1 : finByTeacherOnPupil) {
+				System.out.println(pupil1.getId() + " " +
+						pupil1.getName() + " " +
+						pupil1.getSurname());
+			}
 		}
 	}
 
