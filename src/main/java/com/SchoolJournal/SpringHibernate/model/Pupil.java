@@ -10,7 +10,7 @@ import javax.persistence.*;
 public final class Pupil extends BaseModel {
 
     @ManyToOne
-    @JoinColumn(name = "pupil_iD")
+    @JoinColumn(name = "pupil_id")
     @Setter
     private PupilInClassRoom pupilInClassRoom;
 

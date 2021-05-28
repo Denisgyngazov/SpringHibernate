@@ -30,5 +30,6 @@ public final class Teacher extends BaseModel {
     private String discipline;
 
     public Teacher() {
+
     }
 }
