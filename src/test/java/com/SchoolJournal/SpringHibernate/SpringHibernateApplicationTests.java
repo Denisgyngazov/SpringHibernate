@@ -10,9 +10,11 @@ import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +28,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpringHibernateApplicationTests {
 
 	@Autowired
@@ -40,7 +43,8 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private PupilInClassRoomRepository pupilInClassRoomRepository;
 
-	@BeforeEach
+
+	@BeforeAll
 	@Rollback(value = false)
 	public void contextLoads() {
 		Pupil pupil = new Pupil();
