@@ -20,6 +20,5 @@ public final class ClassRoom extends BaseModel {
     private String name;
 
     public ClassRoom() {
-
     }
 }

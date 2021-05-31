@@ -2,16 +2,24 @@ package com.SchoolJournal.SpringHibernate.repository;
 
 import com.SchoolJournal.SpringHibernate.model.Pupil;
 
+import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
+import com.SchoolJournal.SpringHibernate.model.Teacher;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 
+import javax.persistence.criteria.*;
 import java.util.List;
 
-public interface PupilRepository extends CrudRepository<Pupil,Long> {
+public interface PupilRepository extends CrudRepository<Pupil,Long>, JpaSpecificationExecutor<Pupil> {
     List<Pupil> findByName(String name);
 
     List<Pupil> findByPupilInClassRoomTeacherName(String name);
+
 }
+
+
 
 
 /*
