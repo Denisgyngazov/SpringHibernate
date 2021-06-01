@@ -6,8 +6,12 @@ import com.SchoolJournal.SpringHibernate.model.Pupil;
 import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
+import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +26,9 @@ public class PupilController {
     private PupilRepository pupilRepository;
 
     @GetMapping()
-    public Iterable<Pupil> findAll() {
-        return pupilRepository.findAll();
+    public Iterable<Pupil> findAll(@PageableDefault (page = 1) Pageable pageable) {
+        Page<Pupil> page = pupilRepository.findAll(pageable);
+        return page.getContent();
     }
 
     @GetMapping("/{name}")
@@ -31,28 +36,10 @@ public class PupilController {
         return pupilRepository.findByName(name);
     }
 
-//    @GetMapping("/{searchPupilByTeacher}")
-//    public List<Pupil> findPupilByTeacher(@RequestBody Teacher teacher) {
-//        CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
-//        CriteriaQuery<Pupil> criteria = builder.createQuery(Pupil.class);
-//        Root<Pupil> pupilInClassRoomRoot = criteria.from(Pupil.class);
-//        criteria.select(pupilInClassRoomRoot);
-//        criteria.where(builder.equal(pupilInClassRoomRoot.get(teacher.getName()),"Alla"));
-//        return entityManagerFactory.createEntityManager().createQuery(criteria).getResultList();
-//    }
-
-    private Specification<Pupil> findPupilByTeacherSpecification(String name) {
-        return new Specification<Pupil>() {
-            @Override
-            public Predicate toPredicate(Root<Pupil> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                root = criteriaQuery.from(Pupil.class);
-                Join<Pupil, PupilInClassRoom> pupil_PupilInClassRoomJoin = root.join("pupil_id");
-                Join<Teacher, PupilInClassRoom> teacher_PupilInClassRoomJoin = root.join("teacher_id");
-                return criteriaBuilder.equal(root.get(Teacher.class.getName()), name);
-            }
-        };
+    @GetMapping("/{searchPupilByTeacher}")
+    public List<Pupil> findPupilByTeacher(@RequestBody Teacher teacher) {
+        return pupilRepository.findAll(PupilSpecification.findPupilByTeacherSpecification("Alla"));
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

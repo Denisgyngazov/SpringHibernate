@@ -18,9 +18,15 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.test.annotation.Rollback;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootTest
@@ -135,10 +141,24 @@ class SpringHibernateApplicationTests {
 
 	@Test
 	public void findPupilByTeacherSpecification() {
-		System.out.println("Поиск ученика по учителю испольщую спецификации");
+		System.out.println("Поиск ученика по учителю используя спецификации");
 		System.out.println("----------------------------");
 		Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findAll(PupilSpecification.findPupilByTeacherSpecification("Alla"));
 		for(Pupil pupil: finByTeacherOnPupil) {
+			System.out.println(pupil.getId() + " " +
+					pupil.getName() + " " +
+					pupil.getSurname());
+		}
+	}
+
+	@Test
+	public void findAllPupilsPageable() {
+		Pageable firstPageWithOneElements = PageRequest.of(0,1);
+
+		System.out.println("Поиск всех учеников используя пагнацию");
+		System.out.println("----------------------------");
+		Iterable<Pupil> findByAllPupils = pupilRepository.findAll(PupilSpecification.findPupilByTeacherSpecification("Alla"),firstPageWithOneElements);
+		for(Pupil pupil: findByAllPupils) {
 			System.out.println(pupil.getId() + " " +
 					pupil.getName() + " " +
 					pupil.getSurname());
