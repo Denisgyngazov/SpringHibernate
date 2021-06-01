@@ -39,8 +39,8 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private PupilInClassRoomRepository pupilInClassRoomRepository;
 
-	@Autowired
-	private EntityManagerFactory emf;
+//	@Autowired
+//	private EntityManagerFactory emf;
 
 
 	@BeforeAll
@@ -144,18 +144,4 @@ class SpringHibernateApplicationTests {
 					pupil.getSurname());
 		}
 	}
-
-//	@Test
-//	public void findPupilBeTeacherCriteria() {
-//		EntityManager em = emf.createEntityManager();
-//		//em.getTransaction().begin();
-//		CriteriaBuilder cb = em.getCriteriaBuilder();
-//		CriteriaQuery<Pupil> pupilCriteriaQuery = cb.createQuery(Pupil.class);
-//		Root<Pupil> pupilRoot = pupilCriteriaQuery.from(Pupil.class);
-//		Join<Pupil, PupilInClassRoom> pupil_PupilInClassRoomJoin = pupilRoot.join("pupil_id");
-//		Join<Teacher,PupilInClassRoom> teacher_PupilInClassRoomJoin = pupilRoot.join("teacher_id");
-//		pupilCriteriaQuery.select(pupilRoot);
-//		pupilCriteriaQuery.where(cb.equal(teacher_PupilInClassRoomJoin.get("name"),"Alla"));
-//		System.out.println(em.createQuery(pupilCriteriaQuery).getResultList());
-//	}
 }

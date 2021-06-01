@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
- abstract class BaseModel {
+public abstract class BaseModel {
 
     @Id
     @Column(name = "id")

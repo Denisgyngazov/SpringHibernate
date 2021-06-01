@@ -2,9 +2,6 @@ package com.SchoolJournal.SpringHibernate.repository;
 
 import com.SchoolJournal.SpringHibernate.model.Pupil;
 
-import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
-import com.SchoolJournal.SpringHibernate.model.Teacher;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
@@ -18,9 +15,6 @@ public interface PupilRepository extends CrudRepository<Pupil,Long>, JpaSpecific
     List<Pupil> findByPupilInClassRoomTeacherName(String name);
 
 }
-
-
-
 
 /*
 

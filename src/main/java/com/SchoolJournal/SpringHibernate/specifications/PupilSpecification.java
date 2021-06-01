@@ -1,5 +1,6 @@
 package com.SchoolJournal.SpringHibernate.specifications;
 
+import com.SchoolJournal.SpringHibernate.metamodel.Teacher_;
 import com.SchoolJournal.SpringHibernate.model.Pupil;
 import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
@@ -13,9 +14,9 @@ public final class PupilSpecification {
             @Override
             public Predicate toPredicate(Root<Pupil> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 root = criteriaQuery.from(Pupil.class);
-                Join<Pupil, PupilInClassRoom> pupil_PupilInClassRoomJoin = root.join("pupil.pupil_id");
-                Join<Teacher, PupilInClassRoom> teacher_PupilInClassRoomJoin = root.join("teacher.teacher_id");
-                return criteriaBuilder.equal(root.get(Teacher.class.getName()),name);
+                Join<Pupil, PupilInClassRoom> pupil_PupilInClassRoomJoin = root.join("pupilInClassRoom");
+                Join<PupilInClassRoom, Teacher> teacher_PupilInClassRoomJoin = pupil_PupilInClassRoomJoin.join("teacher");
+                return criteriaBuilder.equal(teacher_PupilInClassRoomJoin.get(Teacher_.Name),name);
             }
         };
     }

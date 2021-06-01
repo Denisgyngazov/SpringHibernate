@@ -6,7 +6,6 @@ import com.SchoolJournal.SpringHibernate.model.Pupil;
 import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -18,9 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/pupil")
 public class PupilController {
-
-    @Autowired
-    private SessionFactory sessionFactory;
 
     @Autowired
     private PupilRepository pupilRepository;
