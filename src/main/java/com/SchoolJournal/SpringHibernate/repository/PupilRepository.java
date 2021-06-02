@@ -18,7 +18,7 @@ public interface PupilRepository extends CrudRepository<Pupil,Long>, JpaSpecific
 
     Page<Pupil> findAll(Specification specification, Pageable pageable);
 
-    List<Pupil> findByPupilInClassRoomTeacherName(String name);
+    List<Pupil> findByClassRoomTeacherName(String name);
 
 }
 

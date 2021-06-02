@@ -12,7 +12,7 @@ public final class Pupil extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "pupil_id")
     @Setter
-    private PupilInClassRoom pupilInClassRoom;
+    private ClassRoom classRoom;
 
     @Column(nullable = false)
     @Getter
@@ -23,6 +23,7 @@ public final class Pupil extends BaseModel {
     @Setter
     @Column(nullable = false)
     private String surname;
+
 
     public Pupil() {
 

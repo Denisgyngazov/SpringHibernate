@@ -9,10 +9,19 @@ import javax.persistence.*;
 @Table(name = "class_room")
 public final class ClassRoom extends BaseModel {
 
-    @ManyToOne
-    @JoinColumn(name = "class_Room_id")
+    @OneToOne(mappedBy = "classRoom")
+    // @JoinTable(name = "pupil_in_class_room_teacher")
+    @Getter
     @Setter
-    private PupilInClassRoom pupilInClassRoom;
+    private Teacher teacher;
+
+    @OneToOne(mappedBy = "classRoom")
+    // @JoinTable(name = "pupil_in_class_room_teacher")
+    @Getter
+    @Setter
+    private Pupil pupil;
+
+
 
     @Column(nullable = false)
     @Getter

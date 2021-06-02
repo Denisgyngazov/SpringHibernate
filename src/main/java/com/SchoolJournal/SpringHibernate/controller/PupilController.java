@@ -3,19 +3,16 @@ package com.SchoolJournal.SpringHibernate.controller;
 import com.SchoolJournal.SpringHibernate.exception.IdMismatchException;
 import com.SchoolJournal.SpringHibernate.exception.NotFoundException;
 import com.SchoolJournal.SpringHibernate.model.Pupil;
-import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.*;
 import java.util.List;
 
 @RestController
@@ -38,7 +35,7 @@ public class PupilController {
 
     @GetMapping("/{searchPupilByTeacher}")
     public List<Pupil> findPupilByTeacher(@RequestBody Teacher teacher) {
-        return pupilRepository.findAll(PupilSpecification.findPupilByTeacherSpecification("Alla"));
+        return pupilRepository.findAll(PupilSpecification.findByClassRoomTeacherName("Alla"));
     }
 
     @PostMapping

@@ -1,32 +1,23 @@
 package com.SchoolJournal.SpringHibernate;
 
-import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
 import com.SchoolJournal.SpringHibernate.model.ClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Pupil;
-import com.SchoolJournal.SpringHibernate.model.PupilInClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
 import com.SchoolJournal.SpringHibernate.repository.ClassRoomRepository;
-import com.SchoolJournal.SpringHibernate.repository.PupilInClassRoomRepository;
 import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
-import lombok.SneakyThrows;
+import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.test.annotation.Rollback;
-
-import javax.persistence.EntityManagerFactory;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @SpringBootTest
@@ -42,13 +33,6 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
-	@Autowired
-	private PupilInClassRoomRepository pupilInClassRoomRepository;
-
-//	@Autowired
-//	private EntityManagerFactory emf;
-
-
 	@BeforeAll
 	@Rollback(value = false)
 	public void contextLoads() {
@@ -63,16 +47,12 @@ class SpringHibernateApplicationTests {
 
 		ClassRoom classRoom = new ClassRoom();
 		classRoom.setName("1A");
+		teacher.setClassRoom(classRoom);
+		pupil.setClassRoom(classRoom);
 
-		PupilInClassRoom pupilInClassRoom = new PupilInClassRoom();
-		teacher.setPupilInClassRoom(pupilInClassRoom);
-		pupil.setPupilInClassRoom(pupilInClassRoom);
-		classRoom.setPupilInClassRoom(pupilInClassRoom);
-
-		pupilInClassRoomRepository.save(pupilInClassRoom);
+		classRoomRepository.save(classRoom);
 		teacherRepository.save(teacher);
 		pupilRepository.save(pupil);
-		classRoomRepository.save(classRoom);
 	}
 
 	@Test
@@ -103,34 +83,22 @@ class SpringHibernateApplicationTests {
 			System.out.println("----------------------------");
 			System.out.println(classRoom1.getId() + " "
 					+ classRoom1.getName());
+			System.out.println(classRoom1.getPupil().getId() + " " +
+					classRoom1.getPupil().getName() + " " +
+					classRoom1.getPupil().getSurname());
+			System.out.println(classRoom1.getTeacher().getId() + " " +
+					classRoom1.getTeacher().getName() + " " +
+					classRoom1.getTeacher().getSurname() + " " +
+					classRoom1.getTeacher().getDiscipline());
 			System.out.println("----------------------------");
 		}
-
-		Iterable<PupilInClassRoom> allPupilInClassRoom = pupilInClassRoomRepository.findAll();
-		for (PupilInClassRoom pupilInClassRoom1 : allPupilInClassRoom) {
-			System.out.println("Ученики в классе");
-			System.out.println("----------------------------");
-			System.out.println(pupilInClassRoom1.getPupil().getId() + " " +
-					pupilInClassRoom1.getPupil().getName() + " " +
-					pupilInClassRoom1.getPupil().getSurname());
-
-			System.out.println(pupilInClassRoom1.getTeacher().getId() + " " +
-					pupilInClassRoom1.getTeacher().getName() + " " +
-					pupilInClassRoom1.getTeacher().getSurname() + " " +
-					pupilInClassRoom1.getTeacher().getDiscipline());
-			System.out.println(pupilInClassRoom1.getClassRoom().getId() + " " +
-					pupilInClassRoom1.getClassRoom().getName());
-			System.out.println("----------------------------");
- 		}
-
 	}
 
-	@SneakyThrows
 	@Test
 	public void findPupilByTeacher() {
 		System.out.println("Поиск ученика по учителю");
 		System.out.println("----------------------------");
-		Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findByPupilInClassRoomTeacherName("Alla");
+		Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findByClassRoomTeacherName("Alla");
 		for (Pupil pupil1 : finByTeacherOnPupil) {
 			System.out.println(pupil1.getId() + " " +
 					pupil1.getName() + " " +
@@ -143,7 +111,7 @@ class SpringHibernateApplicationTests {
 	public void findPupilByTeacherSpecification() {
 		System.out.println("Поиск ученика по учителю используя спецификации");
 		System.out.println("----------------------------");
-		Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findAll(PupilSpecification.findPupilByTeacherSpecification("Alla"));
+		Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findAll(PupilSpecification.findByClassRoomTeacherName("Alla"));
 		for(Pupil pupil: finByTeacherOnPupil) {
 			System.out.println(pupil.getId() + " " +
 					pupil.getName() + " " +
@@ -157,7 +125,7 @@ class SpringHibernateApplicationTests {
 
 		System.out.println("Поиск всех учеников используя пагнацию");
 		System.out.println("----------------------------");
-		Iterable<Pupil> findByAllPupils = pupilRepository.findAll(PupilSpecification.findPupilByTeacherSpecification("Alla"),firstPageWithOneElements);
+		Iterable<Pupil> findByAllPupils = pupilRepository.findAll(PupilSpecification.findByClassRoomTeacherName("Alla"),firstPageWithOneElements);
 		for(Pupil pupil: findByAllPupils) {
 			System.out.println(pupil.getId() + " " +
 					pupil.getName() + " " +
