@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
-@Entity
+@MappedSuperclass
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class BaseModel {
 

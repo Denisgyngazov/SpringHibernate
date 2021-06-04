@@ -9,9 +9,10 @@ import javax.persistence.*;
 @Table(name = "teacher")
 public final class Teacher extends BaseModel {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     @Setter
+    @Getter
     private ClassRoom classRoom;
 
     @Column(nullable = false)

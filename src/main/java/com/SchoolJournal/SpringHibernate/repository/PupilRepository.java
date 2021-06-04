@@ -20,6 +20,7 @@ public interface PupilRepository extends CrudRepository<Pupil,Long>, JpaSpecific
 
     List<Pupil> findByClassRoomTeacherName(String name);
 
+
 }
 
 /*
