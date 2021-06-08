@@ -8,27 +8,33 @@ import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
 import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
 import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
-import org.hibernate.Hibernate;
-import org.junit.jupiter.api.BeforeAll;
 
+import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Testcontainers
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpringHibernateApplicationTests {
 
+	@Container
+	MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
+			.withDatabaseName("schooljournal")
+			.withUsername("root")
+			.withPassword("root");
 	@Autowired
 	private PupilRepository pupilRepository;
 
@@ -38,7 +44,7 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
-	@BeforeAll
+	@BeforeEach
 	@Rollback(value = false)
 	public void contextLoads() {
 		Pupil pupil = new Pupil();
@@ -48,6 +54,10 @@ class SpringHibernateApplicationTests {
 		Pupil pupil1 = new Pupil();
 		pupil1.setName("Elena");
 		pupil1.setSurname("Antonova");
+
+		Pupil pupil2 = new Pupil();
+		pupil2.setName("Svetlana");
+		pupil2.setSurname("Antonova");
 
 		Teacher teacher = new Teacher();
 		teacher.setName("Alla");
@@ -59,13 +69,14 @@ class SpringHibernateApplicationTests {
 
 		pupil.setClassRoom(classRoom);
 		pupil1.setClassRoom(classRoom);
+		pupil2.setClassRoom(classRoom);
 		teacher.setClassRoom(classRoom);
 
 		classRoomRepository.save(classRoom);
 		teacherRepository.save(teacher);
 		pupilRepository.save(pupil);
 		pupilRepository.save(pupil1);
-
+		pupilRepository.save(pupil2);
 	}
 
 	@Test
