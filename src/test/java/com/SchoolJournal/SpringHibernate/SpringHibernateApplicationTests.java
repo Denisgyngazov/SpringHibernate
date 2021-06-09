@@ -20,9 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -30,15 +34,27 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 
 @SpringBootTest
-//@Testcontainers
+@Testcontainers
+@ContextConfiguration(initializers = SpringHibernateApplicationTests.Initializer.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpringHibernateApplicationTests {
 
-//	@Container
-//	MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
-//			.withDatabaseName("schooljournal")
-//			.withUsername("root")
-//			.withPassword("root");
+	@Container
+	public  static MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
+			.withDatabaseName("schooljournal")
+			.withUsername("root")
+			.withPassword("my-secret-pw");
+
+	static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+		@Override
+		public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+			TestPropertyValues.of(
+					"spring.datasource.url=" + mySQLContainer.getJdbcUrl(),
+					"spring.datasource.username=" + mySQLContainer.getUsername(),
+					"spring.datasource.password=" + mySQLContainer.getPassword()
+			).applyTo(configurableApplicationContext.getEnvironment());
+		}
+	}
 	@Autowired
 	private PupilRepository pupilRepository;
 
