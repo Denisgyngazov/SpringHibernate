@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "teacher")
+@NamedEntityGraph(name = "entity-graph",
+        attributeNodes = {@NamedAttributeNode(value = "classRoom")})
 public final class Teacher extends BaseModel {
 
     @ManyToOne(fetch = FetchType.LAZY)

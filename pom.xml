@@ -109,6 +109,10 @@
 			<version>5.4.2</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test-autoconfigure</artifactId>
+        </dependency>
 
     </dependencies>
 

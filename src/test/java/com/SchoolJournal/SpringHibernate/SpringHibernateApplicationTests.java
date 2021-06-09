@@ -9,9 +9,12 @@ import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
 
 import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
 
+import com.SchoolJournal.SpringHibernate.specifications.TeacherSpecification;
 import org.junit.Rule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,21 +23,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 
 @SpringBootTest
-@Testcontainers
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@Testcontainers
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpringHibernateApplicationTests {
 
-	@Container
-	MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
-			.withDatabaseName("schooljournal")
-			.withUsername("root")
-			.withPassword("root");
+//	@Container
+//	MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
+//			.withDatabaseName("schooljournal")
+//			.withUsername("root")
+//			.withPassword("root");
 	@Autowired
 	private PupilRepository pupilRepository;
 
@@ -44,7 +48,7 @@ class SpringHibernateApplicationTests {
 	@Autowired
 	private TeacherRepository teacherRepository;
 
-	@BeforeEach
+	@BeforeAll
 	@Rollback(value = false)
 	public void contextLoads() {
 		Pupil pupil = new Pupil();
@@ -143,5 +147,12 @@ class SpringHibernateApplicationTests {
 		findByAllPupils.forEach(p -> System.out.println(p.getId() + " "
 				+ p.getName() + " "
 				+ p.getSurname()));
+	}
+
+	@Test
+	public void testFinal() {
+		Iterable<Teacher> findByFinal = teacherRepository.findAll(TeacherSpecification.findBy("Alla"));
+		findByFinal.forEach(c-> System.out.println(c.getClassRoom().getId() + " " + c.getClassRoom().getName()));
+		findByFinal.forEach(t-> System.out.println(t.getId() + " " + t.getSurname() + " " + t.getDiscipline()));
 	}
 }

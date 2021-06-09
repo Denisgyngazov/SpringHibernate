@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PupilRepository extends CrudRepository<Pupil,Long>, JpaSpecificationExecutor<Pupil> {
     List<Pupil> findByName(String name);

@@ -4,24 +4,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 
 @Entity
 @Table(name = "class_room")
 public final class ClassRoom extends BaseModel {
 
-    @OneToMany(mappedBy = "classRoom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "classRoom", fetch = FetchType.EAGER)
     @Getter
     @Setter
-    private List<Teacher> teacher = new ArrayList<>();
+    private Set<Teacher> teacher = new HashSet<>();
 
-    @OneToMany( mappedBy = "classRoom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "classRoom",fetch = FetchType.EAGER)
     @Getter
     @Setter
-    private List<Pupil> pupil = new ArrayList<>();
+    private Set<Pupil> pupil = new HashSet<>();
 
     @Column(nullable = false)
     @Getter
