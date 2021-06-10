@@ -27,6 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -35,26 +37,23 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @Testcontainers
-@ContextConfiguration(initializers = SpringHibernateApplicationTests.Initializer.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpringHibernateApplicationTests {
 
 	@Container
-	public  static MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
+	public static MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
 			.withDatabaseName("schooljournal")
 			.withUsername("root")
 			.withPassword("my-secret-pw");
 
-	static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-		@Override
-		public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-			TestPropertyValues.of(
-					"spring.datasource.url=" + mySQLContainer.getJdbcUrl(),
-					"spring.datasource.username=" + mySQLContainer.getUsername(),
-					"spring.datasource.password=" + mySQLContainer.getPassword()
-			).applyTo(configurableApplicationContext.getEnvironment());
-		}
+	@DynamicPropertySource
+	static void mySQLProperties(DynamicPropertyRegistry registry) {
+		mySQLContainer.start();
+		registry.add("spring.datasource.url",mySQLContainer::getJdbcUrl);
+		registry.add("spring.datasource.password",mySQLContainer::getPassword);
+		registry.add("spring.datasource.username",mySQLContainer::getUsername);
 	}
+
 	@Autowired
 	private PupilRepository pupilRepository;
 
@@ -166,7 +165,9 @@ class SpringHibernateApplicationTests {
 	}
 
 	@Test
-	public void testFinal() {
+	public void findByClassroomAndTeacherGraph() {
+		System.out.println("Поиск учителя и класса используя граф");
+		System.out.println("----------------------------");
 		Iterable<Teacher> findByFinal = teacherRepository.findAll(TeacherSpecification.findBy("Alla"));
 		findByFinal.forEach(c-> System.out.println(c.getClassRoom().getId() + " " + c.getClassRoom().getName()));
 		findByFinal.forEach(t-> System.out.println(t.getId() + " " + t.getSurname() + " " + t.getDiscipline()));
