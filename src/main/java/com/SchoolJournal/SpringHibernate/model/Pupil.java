@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "pupil")
 public final class Pupil extends BaseModel {
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pupil_id")
     @Setter
@@ -24,8 +23,4 @@ public final class Pupil extends BaseModel {
     @Setter
     @Column(nullable = false)
     private String surname;
-
-    public Pupil() {
-
-    }
 }

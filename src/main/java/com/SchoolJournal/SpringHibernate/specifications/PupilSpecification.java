@@ -6,8 +6,6 @@ import com.SchoolJournal.SpringHibernate.model.Pupil;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.FetchType;
-import javax.persistence.OrderBy;
 import javax.persistence.criteria.*;
 
 public final class PupilSpecification {
@@ -19,9 +17,8 @@ public final class PupilSpecification {
                 criteriaQuery.distinct(true);
                 Join<Pupil, ClassRoom> pupil_PupilInClassRoomJoin = root.join("classRoom");
                 Join<ClassRoom, Teacher> teacher_PupilInClassRoomJoin = pupil_PupilInClassRoomJoin.join("teacher");
-                return criteriaBuilder.equal(teacher_PupilInClassRoomJoin.get(Teacher_.Name),name);
+                return criteriaBuilder.equal(teacher_PupilInClassRoomJoin.get(Teacher_.Name), name);
             }
-
         };
     }
 }

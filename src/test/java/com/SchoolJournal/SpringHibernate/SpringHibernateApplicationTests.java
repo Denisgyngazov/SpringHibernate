@@ -3,30 +3,15 @@ package com.SchoolJournal.SpringHibernate;
 import com.SchoolJournal.SpringHibernate.model.ClassRoom;
 import com.SchoolJournal.SpringHibernate.model.Pupil;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
-import com.SchoolJournal.SpringHibernate.repository.ClassRoomRepository;
-import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
-import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
-
-import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
-
-import com.SchoolJournal.SpringHibernate.specifications.TeacherSpecification;
-import org.junit.Rule;
+import com.SchoolJournal.SpringHibernate.service.ClassRoomService;
+import com.SchoolJournal.SpringHibernate.service.PupilService;
+import com.SchoolJournal.SpringHibernate.service.TeacherService;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,136 +25,135 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SpringHibernateApplicationTests {
 
-	@Container
-	public static MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
-			.withDatabaseName("schooljournal")
-			.withUsername("root")
-			.withPassword("my-secret-pw");
+    @Container
+    public static MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
+            .withDatabaseName("schooljournal")
+            .withUsername("root")
+            .withPassword("my-secret-pw");
 
-	@DynamicPropertySource
-	static void mySQLProperties(DynamicPropertyRegistry registry) {
-		mySQLContainer.start();
-		registry.add("spring.datasource.url",mySQLContainer::getJdbcUrl);
-		registry.add("spring.datasource.password",mySQLContainer::getPassword);
-		registry.add("spring.datasource.username",mySQLContainer::getUsername);
-	}
+    @DynamicPropertySource
+    static void mySQLProperties(DynamicPropertyRegistry registry) {
+        mySQLContainer.start();
+        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.password", mySQLContainer::getPassword);
+        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+    }
 
-	@Autowired
-	private PupilRepository pupilRepository;
+    @Autowired
+    private PupilService pupilService;
 
-	@Autowired
-	private ClassRoomRepository classRoomRepository;
+    @Autowired
+    private ClassRoomService classRoomService;
 
-	@Autowired
-	private TeacherRepository teacherRepository;
+    @Autowired
+    private TeacherService teacherService;
 
-	@BeforeAll
-	@Rollback(value = false)
-	public void contextLoads() {
-		Pupil pupil = new Pupil();
-		pupil.setName("Anton");
-		pupil.setSurname("Savridov");
+    @BeforeAll
+    @Rollback(value = false)
+    public void contextLoads() {
+        Pupil pupil = new Pupil();
+        pupil.setName("Anton");
+        pupil.setSurname("Savridov");
 
-		Pupil pupil1 = new Pupil();
-		pupil1.setName("Elena");
-		pupil1.setSurname("Antonova");
+        Pupil pupil1 = new Pupil();
+        pupil1.setName("Elena");
+        pupil1.setSurname("Antonova");
 
-		Pupil pupil2 = new Pupil();
-		pupil2.setName("Svetlana");
-		pupil2.setSurname("Antonova");
+        Pupil pupil2 = new Pupil();
+        pupil2.setName("Svetlana");
+        pupil2.setSurname("Antonova");
 
-		Teacher teacher = new Teacher();
-		teacher.setName("Alla");
-		teacher.setSurname("Aronova");
-		teacher.setDiscipline("Mathematics");
+        Teacher teacher = new Teacher();
+        teacher.setName("Alla");
+        teacher.setSurname("Aronova");
+        teacher.setDiscipline("Mathematics");
 
-		ClassRoom classRoom = new ClassRoom();
-		classRoom.setName("1A");
+        ClassRoom classRoom = new ClassRoom();
+        classRoom.setName("1A");
 
-		pupil.setClassRoom(classRoom);
-		pupil1.setClassRoom(classRoom);
-		pupil2.setClassRoom(classRoom);
-		teacher.setClassRoom(classRoom);
+        pupil.setClassRoom(classRoom);
+        pupil1.setClassRoom(classRoom);
+        pupil2.setClassRoom(classRoom);
+        teacher.setClassRoom(classRoom);
 
-		classRoomRepository.save(classRoom);
-		teacherRepository.save(teacher);
-		pupilRepository.save(pupil);
-		pupilRepository.save(pupil1);
-		pupilRepository.save(pupil2);
-	}
+        classRoomService.create(classRoom);
+        teacherService.create(teacher);
+        pupilService.create(pupil);
+        pupilService.create(pupil1);
+        pupilService.create(pupil2);
+    }
 
-	@Test
-	public void createEntity() {
-		System.out.println("Ученики");
-		System.out.println("----------------------------");
-		Iterable<Pupil> allPupil = pupilRepository.findAll();
-		allPupil.forEach(p-> System.out.println(p.getId() + " "
-				+ p.getName() + " "
-				+ p.getSurname()));
-		System.out.println("----------------------------");
+    @Test
+    @Transactional
+    public void createEntity() {
+        System.out.println("Ученики");
+        System.out.println("----------------------------");
+        Iterable<Pupil> allPupil = pupilService.findAll();
+        allPupil.forEach(p -> System.out.println(p.getId() + " "
+                + p.getName() + " "
+                + p.getSurname()));
+        System.out.println("----------------------------");
 
-		Iterable<Teacher> allTeacher = teacherRepository.findAll();
-		System.out.println("Учителя");
-		System.out.println("----------------------------");
-		allTeacher.forEach(t -> System.out.println(t.getId() + " "
-				+ t.getName() + " "
-				+ t.getSurname() + " "
-				+ t.getDiscipline()));
-		System.out.println("----------------------------");
+        Iterable<Teacher> allTeacher = teacherService.findAll();
+        System.out.println("Учителя");
+        System.out.println("----------------------------");
+        allTeacher.forEach(t -> System.out.println(t.getId() + " "
+                + t.getName() + " "
+                + t.getSurname() + " "
+                + t.getDiscipline()));
+        System.out.println("----------------------------");
 
-		System.out.println("Класс");
-		System.out.println("----------------------------");
-		Iterable<ClassRoom> allClassRoom = classRoomRepository.findAll();
-		allClassRoom.forEach(c -> System.out.println(c.getId() + " " + c.getName()));
-		allClassRoom.forEach(c -> c.getTeacher().forEach(t -> System.out.println(t.getId() + " "
-				+ t.getName() + " " +
-				t.getSurname() + " " +
-				t.getDiscipline())));
-		allClassRoom.forEach(c -> c.getPupil().forEach(p -> System.out.println(p.getId() + " " +
-				p.getName() + " " +
-				p.getSurname())));
-		System.out.println("----------------------------");
-	}
+        System.out.println("Класс");
+        System.out.println("----------------------------");
+        Iterable<ClassRoom> allClassRoom = classRoomService.findAll();
+        allClassRoom.forEach(c -> System.out.println(c.getId() + " " + c.getName()));
+        allClassRoom.forEach(c -> c.getTeacher().forEach(t -> System.out.println(t.getId() + " "
+                + t.getName() + " " +
+                t.getSurname() + " " +
+                t.getDiscipline())));
+        allClassRoom.forEach(c -> c.getPupil().forEach(p -> System.out.println(p.getId() + " " +
+                p.getName() + " " +
+                p.getSurname())));
+        System.out.println("----------------------------");
+    }
 
 
-	@Test
-	public void findPupilByTeacher() {
-		System.out.println("Поиск ученика по учителю");
-		System.out.println("----------------------------");
-		Iterable<Pupil> findPupilByTeacher = pupilRepository.findByClassRoomTeacherName("Alla");
-		findPupilByTeacher.forEach(p-> System.out.println(p.getId() + " "
-				+ p.getName() + " "
-				+ p.getSurname()));
-	}
+    @Test
+    public void findPupilByTeacher() {
+        System.out.println("Поиск ученика по учителю");
+        System.out.println("----------------------------");
+        Iterable<Pupil> findPupilByTeacher = pupilService.findByClassRoomTeacherName("Alla");
+        findPupilByTeacher.forEach(p -> System.out.println(p.getId() + " "
+                + p.getName() + " "
+                + p.getSurname()));
+    }
 
-	@Test
-	public void findPupilByTeacherSpecification() {
-		System.out.println("Поиск ученика по учителю используя спецификации");
-		System.out.println("----------------------------");
-		Iterable<Pupil> finByTeacherOnPupil = pupilRepository.findAll(PupilSpecification.findByClassRoomTeacherName("Alla"));
-		finByTeacherOnPupil.forEach(p-> System.out.println(p.getId() + " "
-				+ p.getName()+ " "
-				+ p.getSurname()));
-	}
+    @Test
+    public void findPupilByTeacherSpecification() {
+        System.out.println("Поиск ученика по учителю используя спецификации");
+        System.out.println("----------------------------");
+        Iterable<Pupil> finByTeacherOnPupil = pupilService.findPupilByTeacherSpecification("Alla");
+        finByTeacherOnPupil.forEach(p -> System.out.println(p.getId() + " "
+                + p.getName() + " "
+                + p.getSurname()));
+    }
 
-	@Test
-	public void findAllPupilsPageable() {
-		Pageable firstPageWithOneElements = PageRequest.of(0,1);
+    @Test
+    public void findAllPupilsPageable() {
+        System.out.println("Поиск всех учеников используя пагнацию");
+        System.out.println("----------------------------");
+        Iterable<Pupil> findByAllPupils = pupilService.findPupilByTeacherSpecificationAndPageable("Alla",0,1);
+        findByAllPupils.forEach(p -> System.out.println(p.getId() + " "
+                + p.getName() + " "
+                + p.getSurname()));
+    }
 
-		System.out.println("Поиск всех учеников используя пагнацию");
-		System.out.println("----------------------------");
-		Iterable<Pupil> findByAllPupils = pupilRepository.findAll(PupilSpecification.findByClassRoomTeacherName("Alla"),firstPageWithOneElements);
-		findByAllPupils.forEach(p -> System.out.println(p.getId() + " "
-				+ p.getName() + " "
-				+ p.getSurname()));
-	}
-
-	@Test
-	public void findByClassroomAndTeacherGraph() {
-		System.out.println("Поиск учителя и класса используя граф");
-		System.out.println("----------------------------");
-		Iterable<Teacher> findByFinal = teacherRepository.findAll(TeacherSpecification.findBy("Alla"));
-		findByFinal.forEach(c-> System.out.println(c.getClassRoom().getId() + " " + c.getClassRoom().getName()));
-		findByFinal.forEach(t-> System.out.println(t.getId() + " " + t.getSurname() + " " + t.getDiscipline()));
-	}
+    @Test
+    public void findByClassroomAndTeacherGraph() {
+        System.out.println("Поиск учителя и класса используя граф");
+        System.out.println("----------------------------");
+        Iterable<Teacher> findByFinal = teacherService.findByClassroomAndTeacherNameGraph("Alla");
+        findByFinal.forEach(c -> System.out.println(c.getClassRoom().getId() + " " + c.getClassRoom().getName()));
+        findByFinal.forEach(t -> System.out.println(t.getId() + " " + t.getSurname() + " " + t.getDiscipline()));
+    }
 }

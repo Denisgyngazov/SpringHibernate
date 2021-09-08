@@ -10,7 +10,6 @@ import javax.persistence.*;
 @NamedEntityGraph(name = "entity-graph",
         attributeNodes = {@NamedAttributeNode(value = "classRoom")})
 public final class Teacher extends BaseModel {
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     @Setter
@@ -31,8 +30,4 @@ public final class Teacher extends BaseModel {
     @Getter
     @Setter
     private String discipline;
-
-    public Teacher() {
-
-    }
 }

@@ -1,62 +1,55 @@
 package com.SchoolJournal.SpringHibernate.controller;
 
-import com.SchoolJournal.SpringHibernate.exception.IdMismatchException;
-import com.SchoolJournal.SpringHibernate.exception.NotFoundException;
 import com.SchoolJournal.SpringHibernate.model.Pupil;
-import com.SchoolJournal.SpringHibernate.model.Teacher;
-import com.SchoolJournal.SpringHibernate.repository.PupilRepository;
-import com.SchoolJournal.SpringHibernate.specifications.PupilSpecification;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import com.SchoolJournal.SpringHibernate.service.PupilService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/pupil")
-public class PupilController {
+public final class PupilController {
+    private final PupilService pupilService;
 
-    @Autowired
-    private PupilRepository pupilRepository;
+    public PupilController(PupilService pupilService) {
+        this.pupilService = pupilService;
+    }
 
     @GetMapping()
-    public Iterable<Pupil> findAll(@PageableDefault (page = 1) Pageable pageable) {
-        Page<Pupil> page = pupilRepository.findAll(pageable);
-        return page.getContent();
+    public ResponseEntity<Iterable<Pupil>> findAll() {
+        return ResponseEntity.ok(pupilService.findAll());
+    }
+
+    @GetMapping("/{page}")
+    public ResponseEntity<Iterable<Pupil>> findAllOnPage(@PageableDefault(page = 1) Pageable pageable) {
+        return ResponseEntity.ok(pupilService.findAllOnPage(pageable));
     }
 
     @GetMapping("/{name}")
-    public List<Pupil> findByName(@PathVariable String name) {
-        return pupilRepository.findByName(name);
+    public ResponseEntity<List<Pupil>> findByName(@PathVariable String name) {
+        return ResponseEntity.ok(pupilService.findByName(name));
     }
 
-    @GetMapping("/{searchPupilByTeacher}")
-    public List<Pupil> findPupilByTeacher(@RequestBody Teacher teacher) {
-        return pupilRepository.findAll(PupilSpecification.findByClassRoomTeacherName("Alla"));
+    @GetMapping("/{findPupilByTeacher}")
+    public ResponseEntity<List<Pupil>> findPupilByTeacher(@RequestBody String name) {
+        return ResponseEntity.ok(pupilService.findPupilByTeacherSpecification(name));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Pupil create(@RequestBody Pupil pupil) {
-        return pupilRepository.save(pupil);
+    public ResponseEntity<Pupil> create(@RequestBody Pupil pupil) {
+        return ResponseEntity.ok(pupilService.create(pupil));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        pupilRepository.findById(id).orElseThrow(NotFoundException::new);
-        pupilRepository.deleteById(id);
-
+        pupilService.delete(id);
     }
 
     @PutMapping("/{id}")
-    public Pupil updatePupil(@RequestBody Pupil pupil, @PathVariable Long id) {
-        if(pupil.getId() != id) {
-            throw new IdMismatchException("Несоответсвие id");
-        }
-        pupilRepository.findById(id).orElseThrow(NotFoundException::new);
-        return pupilRepository.save(pupil);
+    public ResponseEntity<Pupil> updatePupil(@RequestBody Pupil pupil, @PathVariable Long id) {
+        return ResponseEntity.ok(pupilService.updatePupil(pupil, id));
     }
 }

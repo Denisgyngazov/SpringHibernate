@@ -1,50 +1,49 @@
 package com.SchoolJournal.SpringHibernate.controller;
 
-import com.SchoolJournal.SpringHibernate.exception.IdMismatchException;
-import com.SchoolJournal.SpringHibernate.exception.NotFoundException;
 import com.SchoolJournal.SpringHibernate.model.Teacher;
-import com.SchoolJournal.SpringHibernate.repository.TeacherRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.SchoolJournal.SpringHibernate.service.TeacherService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/teacher")
-public class TeacherController {
+public final class TeacherController {
 
-    @Autowired
-    private TeacherRepository teacherRepository;
+    private final TeacherService teacherService;
+
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
 
     @GetMapping()
-    public  Iterable findAll() {
-        return teacherRepository.findAll();
+    public ResponseEntity<Iterable<Teacher>> findAll() {
+        return ResponseEntity.ok(teacherService.findAll());
     }
 
     @GetMapping("/{name}")
-    public List findByName(@PathVariable String name) {
-        return teacherRepository.findByName(name);
+    public ResponseEntity<List<Teacher>> findByName(@PathVariable String name) {
+        return ResponseEntity.ok(teacherService.findByName(name));
+    }
+
+    @GetMapping("/{graph}")
+    public ResponseEntity<Iterable<Teacher>> findByClassroomAndTeacherNameGraph(@PathVariable String name) {
+        return ResponseEntity.ok(teacherService.findByClassroomAndTeacherNameGraph(name));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Teacher create(@RequestBody Teacher teacher) {
-        return teacherRepository.save(teacher);
+    public ResponseEntity<Teacher> create(@RequestBody Teacher teacher) {
+        return ResponseEntity.ok(teacherService.create(teacher));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        teacherRepository.findById(id).orElseThrow(NotFoundException::new);
-        teacherRepository.deleteById(id);
+        teacherService.delete(id);
     }
 
     @PutMapping("/{id}")
-    public Teacher updateTeacher(@RequestBody Teacher teacher, @PathVariable Long id) {
-        if(teacher.getId() != id) {
-            throw new IdMismatchException("Несоответсвие id");
-        }
-        teacherRepository.findById(id).orElseThrow(NotFoundException::new);
-        return teacherRepository.save(teacher);
+    public ResponseEntity<Teacher> updateTeacher(@RequestBody Teacher teacher, @PathVariable Long id) {
+        return ResponseEntity.ok(teacherService.updateTeacher(teacher, id));
     }
 }
